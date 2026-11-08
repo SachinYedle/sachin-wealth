@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Sachin Wealth" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#F4F1EA" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20180%20180%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%234338CA%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%232563EB%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22180%22%20height%3D%22180%22%20rx%3D%2242%22%20fill%3D%22url(%23g)%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2256%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2278%22%3E%E2%82%B9%3C%2Ftext%3E%3C%2Fsvg%3E" />
+  <title>Sachin Wealth Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .btn-primary-uniform {
+      background: linear-gradient(135deg, #4338CA 0%, #2563EB 100%) !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 4px 12px rgba(55, 48, 163, 0.22);
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .safe-bottom { padding-bottom: calc(5.5rem + env(safe-area-inset-bottom)); }
+  </style>
+</head>
+<body class="bg-[#F4F1EA] text-zinc-900 safe-bottom transition-colors duration-200" id="bodyRoot">
+  <div id="app"></div>
+
+  <script>
+    // Inject Dynamic Web App Manifest for iOS & Android Home Screen Installation
+    const manifestData = {
+      name: "Sachin Wealth Studio",
+      short_name: "Sachin Wealth",
+      start_url: "./index.html",
+      display: "standalone",
+      background_color: "#F4F1EA",
+      theme_color: "#4338CA",
+      icons: [{ src: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20180%20180%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%234338CA%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%232563EB%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22180%22%20height%3D%22180%22%20rx%3D%2242%22%20fill%3D%22url(%23g)%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2256%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2278%22%3E%E2%82%B9%3C%2Ftext%3E%3C%2Fsvg%3E", sizes: "180x180", type: "image/svg+xml", purpose: "any maskable" }]
+    };
+    const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' });
+    const manifestLink = document.createElement('link');
+    manifestLink.rel = 'manifest';
+    manifestLink.href = URL.createObjectURL(manifestBlob);
+    document.head.appendChild(manifestLink);
+
+    const INITIAL_DATA = {"categoryTree":[{"id":"cat_food","name":"Food & Groceries","emoji":"🛒","monthlyBudget":11200,"subcategories":["Groceries & Dry Fruits","Vegetables & Fruits","Milk & Dairy","Party","Ice Cream & Snacks"]},{"id":"cat_medical","name":"Hospital & Medical","emoji":"🏥","monthlyBudget":10000,"subcategories":["Prenatal & Pregnancy","Parents Medicines & Strips","Hospital & Doctor Visits","Vaccines & Baby Care"]},{"id":"cat_transport","name":"3XO & Transport","emoji":"🚗","monthlyBudget":25800,"subcategories":["3XO Diesel","XUV 3XO EMI","Car Gas / Fastag / Service","Auto / Cab / Train"]},{"id":"cat_utilities","name":"Home & Utilities","emoji":"🏠","monthlyBudget":16000,"subcategories":["Home Rent","Electricity","Gas Cylinder","Internet & Mobile","Household Items"]},{"id":"cat_family","name":"Family, Kids & Home Support","emoji":"👨‍👩‍👧‍👦","monthlyBudget":14000,"subcategories":["Sent to Home (Parents)","Son School Fee & Items","Apparel & Kids Clothes","Saloon & Personal Care","Bro / Family Help"]},{"id":"cat_farm","name":"Social, Farm & Home","emoji":"🚜","monthlyBudget":3000,"subcategories":["Tractor Diesel","Dining Out & Get-Togethers","Gifts & Festivals","Culture & Temple"]},{"id":"cat_finance","name":"Debt, CC & Insurance","emoji":"🏦","monthlyBudget":28833,"subcategories":["Friend Debt Payoff","BoB Gold Loan Interest","RuPay Credit Card Bill","Term & Health Insurance","Zerodha / Broker Charges"]}],"transactions":[{"id":"tx_1","date":"2026-11-07","type":"Expense","amount":2200,"category":"Hospital & Medical","subcategory":"Hospital & Doctor Visits","merchant":"Nana hospital","account":"Bank UPI"},{"id":"tx_2","date":"2026-11-07","type":"Expense","amount":1120,"category":"Hospital & Medical","subcategory":"Parents Medicines & Strips","merchant":"Nana tablets","account":"Bank UPI"},{"id":"tx_3","date":"2026-11-06","type":"Expense","amount":950,"category":"Hospital & Medical","subcategory":"Parents Medicines & Strips","merchant":"Contour sugar strips","account":"RuPay CC"},{"id":"tx_4","date":"2026-11-06","type":"Expense","amount":1880,"category":"3XO & Transport","subcategory":"3XO Diesel","merchant":"3XO Diesel refill","account":"RuPay CC"},{"id":"tx_5","date":"2026-11-05","type":"Expense","amount":2700,"category":"Food & Groceries","subcategory":"Groceries & Dry Fruits","merchant":"Dry fruits badam/kaju","account":"Sodexo"},{"id":"tx_6","date":"2026-11-05","type":"Expense","amount":950,"category":"Family, Kids & Home Support","subcategory":"Apparel & Kids Clothes","merchant":"Sankalp dress & Samu night pant","account":"Bank UPI"},{"id":"tx_7","date":"2026-11-04","type":"Expense","amount":420,"category":"Food & Groceries","subcategory":"Party","merchant":"Chicken for home / Eggs","account":"Bank UPI"},{"id":"tx_8","date":"2026-11-04","type":"Expense","amount":640,"category":"Hospital & Medical","subcategory":"Parents Medicines & Strips","merchant":"Aaji tablets","account":"Bank UPI"},{"id":"tx_9","date":"2026-11-03","type":"Expense","amount":310,"category":"Food & Groceries","subcategory":"Vegetables & Fruits","merchant":"Weekly vegetables & fruits","account":"Bank UPI"},{"id":"tx_10","date":"2026-11-02","type":"Expense","amount":150,"category":"Family, Kids & Home Support","subcategory":"Saloon & Personal Care","merchant":"Saloon haircut","account":"Bank UPI"},{"id":"tx_11","date":"2026-11-01","type":"Expense","amount":75000,"category":"Debt, CC & Insurance","subcategory":"Friend Debt Payoff","merchant":"Paid to Friend (Nov Installment)","account":"Bank Transfer"},{"id":"tx_12","date":"2026-11-01","type":"Expense","amount":13200,"category":"Debt, CC & Insurance","subcategory":"BoB Gold Loan Interest","merchant":"BoB Gold Loan Monthly Interest","account":"Bank Transfer"},{"id":"tx_13","date":"2026-11-01","type":"Expense","amount":20800,"category":"3XO & Transport","subcategory":"XUV 3XO EMI","merchant":"Mahindra XUV 3XO Auto-EMI","account":"Bank Transfer"}],"assetGroups":[{"id":"grp_retire","title":"Retirement Corpus (Auto-Incremented)","items":[{"id":"ast_nps","name":"NPS (Tier 1)","amount":676120,"note":"+₹20,497/mo from Payslip"},{"id":"ast_pf","name":"EPF (Provident Fund)","amount":625213,"note":"+₹4,720/mo (Emp + Employer)"},{"id":"ast_ppf","name":"PPF (Public Provident Fund)","amount":118178,"note":"+₹1,000/mo from Savings A/c"}]},{"id":"grp_mf","title":"Mutual Funds (Nov 2026 Sheet • ₹4,89,073)","items":[{"id":"mf_1","name":"Parag Parikh Flexi Cap","amount":225480,"note":"Core Equity"},{"id":"mf_2","name":"Mirae Asset Large & Midcap","amount":89540,"note":"ELSS / Core"},{"id":"mf_3","name":"Axis Bluechip / ELSS","amount":60210,"note":"Large Cap"},{"id":"mf_4","name":"Quant Active / Midcap","amount":53844,"note":"High Growth"},{"id":"mf_5","name":"Quant ELSS Tax Saver","amount":27540,"note":"Tax Saver"},{"id":"mf_6","name":"Axis Mid Cap","amount":18325,"note":"Mid Cap"},{"id":"mf_7","name":"Axis Small Cap","amount":15826,"note":"Small Cap"},{"id":"mf_8","name":"Motilal Oswal Midcap","amount":6716,"note":"Mid Cap"},{"id":"mf_9","name":"Motilal Oswal Flexi Cap","amount":3917,"note":"Flexi Cap"}]},{"id":"grp_stocks","title":"Direct Shares & US Stocks (₹1,93,972)","items":[{"id":"st_1","name":"Akshata Zerodha Account","amount":101719,"note":"Indian Equity"},{"id":"st_2","name":"Amol Share Account","amount":47700,"note":"Shared Demat"},{"id":"st_3","name":"US Stocks (INDmoney)","amount":30628,"note":"NASDAQ / S&P"},{"id":"st_4","name":"Sachin Zerodha Account","amount":13925,"note":"Direct Equity"}]}],"moneyLent":[{"id":"lent_siddhu","name":"Siddhu","amount":261371,"note":"Reconciled Nov 2026 Sheet Total","history":[{"id":"h_s1","date":"2026-10-01","type":"lent","amount":233586,"note":"Oct 2026 Sheet Carry-Forward"},{"id":"h_s2","date":"2026-11-02","type":"lent","amount":27785,"note":"Nov 2026 Sheet Addition"}]},{"id":"lent_ranjeet","name":"Ranjeet Bhau","amount":200000,"note":"Nov 2026 Sheet Balance","history":[{"id":"h_r1","date":"2026-11-01","type":"lent","amount":200000,"note":"Sheet Balance"}]},{"id":"lent_fpc","name":"Sant Madhavpuri FPC","amount":130000,"note":"Farmer Producer Company","history":[{"id":"h_f1","date":"2026-11-01","type":"lent","amount":130000,"note":"FPC Capital / Lent"}]},{"id":"lent_bramha","name":"Bramhanand Shivange","amount":95300,"note":"Nov 2026 Sheet Balance","history":[{"id":"h_b1","date":"2026-11-01","type":"lent","amount":95300,"note":"Sheet Balance"}]},{"id":"lent_balaji_sur","name":"Balaji Survase","amount":25410,"note":"Nov 2026 Sheet Balance","history":[{"id":"h_bs1","date":"2026-11-01","type":"lent","amount":25410,"note":"Sheet Balance"}]},{"id":"lent_dhana","name":"Dhana Mama","amount":17000,"note":"Nov 2026 Sheet Balance","history":[{"id":"h_d1","date":"2026-11-01","type":"lent","amount":17000,"note":"Sheet Balance"}]},{"id":"lent_dilip","name":"Dilip","amount":15000,"note":"Nov 2026 Sheet Balance","history":[{"id":"h_dl1","date":"2026-11-01","type":"lent","amount":15000,"note":"Sheet Balance"}]},{"id":"lent_amol","name":"Amol Survase","amount":12500,"note":"Nov 2026 Sheet Balance","history":[{"id":"h_am1","date":"2026-11-01","type":"lent","amount":12500,"note":"Sheet Balance"}]},{"id":"lent_vikas","name":"Vikas Landge","amount":10000,"note":"Nov 2026 Sheet Balance","history":[{"id":"h_vk1","date":"2026-11-01","type":"lent","amount":10000,"note":"Sheet Balance"}]},{"id":"lent_guru","name":"Guru Tel","amount":10000,"note":"Nov 2026 Sheet Balance","history":[{"id":"h_gr1","date":"2026-11-01","type":"lent","amount":10000,"note":"Sheet Balance"}]},{"id":"lent_balaji_shi","name":"Balaji Shivange","amount":5000,"note":"Nov 2026 Sheet Balance","history":[{"id":"h_bsh1","date":"2026-11-01","type":"lent","amount":5000,"note":"Sheet Balance"}]}],"moneyBorrowed":[{"id":"debt_bob","name":"Bank of Baroda Gold Loan","rate":"8.8%","amount":1800000,"note":"₹13,200/mo interest; principal attack starts Sep 2027"},{"id":"debt_friends","name":"Friend Debt (Vishnu ₹9L + Pramod ₹2.7L + Others)","rate":"0%","amount":1425000,"note":"₹15L original minus ₹75,000 paid in Nov 2026; closes Sep 2027"},{"id":"debt_car","name":"Mahindra XUV 3XO AX5 Diesel Loan","rate":"9%","amount":1100000,"note":"₹20,800/mo EMI (71 months left)"}],"roadmap":[{"id":"m1","month":"Nov 2026","netPay":252097,"friendPay":75000,"friendBal":1425000,"bobPay":13200,"bobBal":1800000,"note":"₹75k paid to friend; ₹24.6k left in bank","done":true},{"id":"m2","month":"Dec 2026","netPay":257097,"friendPay":165000,"friendBal":1260000,"bobPay":13200,"bobBal":1800000,"note":"Sodexo reduced to ₹5k; last month of ₹10k deduction","done":false},{"id":"m3","month":"Jan 2027","netPay":267097,"friendPay":175000,"friendBal":1085000,"bobPay":13200,"bobBal":1800000,"note":"₹10k salary deduction stops! ₹1.75L/mo transfer starts","done":false},{"id":"m4","month":"Feb 2027","netPay":267097,"friendPay":175000,"friendBal":910000,"bobPay":13200,"bobBal":1800000,"note":"Includes ₹10k/mo sent to home","done":false},{"id":"m5","month":"Mar 2027","netPay":267097,"friendPay":0,"friendBal":910000,"bobPay":13200,"bobBal":1800000,"note":"BABY DELIVERY MONTH: Friend paused; ₹1.85L cash kept for hospital","done":false},{"id":"m6","month":"Apr 2027","netPay":267097,"friendPay":175000,"friendBal":735000,"bobPay":13200,"bobBal":1800000,"note":"Resume ₹1.75L transfer (swap with Mar if April delivery)","done":false},{"id":"m7","month":"May 2027","netPay":267097,"friendPay":175000,"friendBal":560000,"bobPay":13200,"bobBal":1800000,"note":"Normal payoff month","done":false},{"id":"m8","month":"Jun 2027","netPay":267097,"friendPay":145000,"friendBal":415000,"bobPay":13200,"bobBal":1800000,"note":"₹30,000 paid directly for Son June School Fee","done":false},{"id":"m9","month":"Jul 2027","netPay":267097,"friendPay":175000,"friendBal":240000,"bobPay":13200,"bobBal":1800000,"note":"Normal payoff month","done":false},{"id":"m10","month":"Aug 2027","netPay":267097,"friendPay":175000,"friendBal":65000,"bobPay":13200,"bobBal":1800000,"note":"Only ₹65k left on Friend Debt","done":false},{"id":"m11","month":"Sep 2027","netPay":267097,"friendPay":65000,"friendBal":0,"bobPay":123200,"bobBal":1690000,"note":"FRIEND 100% CLOSED! ₹1.10L attacks BoB Gold Loan","done":false},{"id":"m12","month":"Oct 2027","netPay":267097,"friendPay":0,"friendBal":0,"bobPay":188200,"bobBal":1514193,"note":"Full ₹1,88,200/mo attacks BoB Gold Loan","done":false},{"id":"m13","month":"Nov 2027","netPay":267097,"friendPay":0,"friendBal":0,"bobPay":188200,"bobBal":1337097,"note":"Gold Loan principal drops below ₹13.4L","done":false},{"id":"m14","month":"Dec 2027","netPay":267097,"friendPay":0,"friendBal":0,"bobPay":188200,"bobBal":1158702,"note":"Year-end milestone","done":false},{"id":"m15","month":"Jan 2028","netPay":267097,"friendPay":0,"friendBal":0,"bobPay":188200,"bobBal":978999,"note":"Gold Loan drops under ₹10L!","done":false},{"id":"m16","month":"Feb 2028","netPay":267097,"friendPay":0,"friendBal":0,"bobPay":188200,"bobBal":797978,"note":"Gold Loan rapid paydown","done":false},{"id":"m17","month":"Mar 2028","netPay":267097,"friendPay":0,"friendBal":0,"bobPay":188200,"bobBal":615630,"note":" Baby turns 1 year old!","done":false},{"id":"m18","month":"Apr 2028","netPay":267097,"friendPay":0,"friendBal":0,"bobPay":188200,"bobBal":431945,"note":"Gold Loan down to ₹4.31L","done":false},{"id":"m19","month":"May 2028","netPay":267097,"friendPay":0,"friendBal":0,"bobPay":188200,"bobBal":246913,"note":"Final full month on Gold Loan","done":false},{"id":"m20","month":"Jun 2028","netPay":267097,"friendPay":0,"friendBal":0,"bobPay":188200,"bobBal":60524,"note":"Almost zero!","done":false},{"id":"m21","month":"Jul 2028","netPay":267097,"friendPay":0,"friendBal":0,"bobPay":60968,"bobBal":0,"note":"GOLD LOAN 100% CLOSED! Start ₹70k/mo Kids College SIPs","done":false}],"liveBankBalance":24600,"rupayCcBalance":2872,"uiTheme":"light"};
+    let state = JSON.parse(localStorage.getItem('sachin_wealth_github_pwa_v1') || 'null') || INITIAL_DATA;
+    let activeTab = 'expenses';
+    let entryMode = 'manual';
+    let selectedMonthIdx = 0; // 0=Nov26, 1=Dec26, 2=Jan27, 4=Mar27, 10=Sep27, 20=Jul28
+    let expandedLentId = 'lent_siddhu';
+    let filterCat = 'All';
+    let searchQ = '';
+    let syncWebhookUrl = localStorage.getItem('sachin_gsheet_webhook') || '';
+
+    const TIMELINE = [
+      { label: 'Nov 26 (Now)', m: 0, pay: 252097, desc: 'Current Baseline • ₹75,000 Paid to Friend' },
+      { label: 'Dec 26', m: 1, pay: 257097, desc: 'Sodexo ₹5k • ₹1,65,000 Friend Transfer' },
+      { label: 'Jan 27 ⭐', m: 2, pay: 267097, desc: '₹10k Deduction Ends! ₹1,75,000/mo Friend Transfer' },
+      { label: 'Mar 27 👶', m: 4, pay: 267097, desc: 'Baby Delivery Month • ₹1.85L Cash Kept in Hand' },
+      { label: 'Sep 27 🎉', m: 10, pay: 267097, desc: 'Friend 100% Paid Off! ₹1.10L Attacks Gold Loan' },
+      { label: 'Jul 28 🏆', m: 20, pay: 267097, desc: '₹33L Debt (Friend + Gold Loan) 100% Wiped Out!' }
+    ];
+
+    function save() {
+      localStorage.setItem('sachin_wealth_github_pwa_v1', JSON.stringify(state));
+      if (syncWebhookUrl) {
+        fetch(syncWebhookUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify(state) }).catch(()=>{});
+      }
+      render();
+    }
+
+    function formatINR(val) {
+      const n = Math.round(Number(val) || 0);
+      return (n < 0 ? '-₹' : '₹') + Math.abs(n).toLocaleString('en-IN');
+    }
+
+    // Check incoming ?sms= parameter from iPhone Shortcuts
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const sms = params.get('sms');
+      if (sms) {
+        activeTab = 'expenses';
+        entryMode = 'sms';
+        setTimeout(() => {
+          const box = document.getElementById('smsBox');
+          if (box) { box.value = decodeURIComponent(sms); parseSmsText(box.value); }
+        }, 150);
+      }
+    });
+
+    window.parseSmsText = function(raw) {
+      if (!raw) return;
+      const amtMatch = raw.match(/(?:Rs\.?|INR|₹)\s*([0-9,]+(?:\.\d{1,2})?)/i);
+      if (amtMatch && amtMatch[1]) {
+        document.getElementById('txAmt').value = amtMatch[1].replace(/,/g, '');
+      }
+      const lower = raw.toLowerCase();
+      const accEl = document.getElementById('txAcc');
+      const catEl = document.getElementById('txCat');
+      const subEl = document.getElementById('txSub');
+      const noteEl = document.getElementById('txNote');
+
+      if (lower.includes('rupay') || lower.includes('credit card') || lower.includes('cc')) accEl.value = 'RuPay CC';
+      else if (lower.includes('sodexo') || lower.includes('pluxee')) accEl.value = 'Sodexo';
+      else accEl.value = 'Bank UPI';
+
+      if (lower.includes('petrol') || lower.includes('hpcl') || lower.includes('diesel') || lower.includes('fuel')) {
+        catEl.value = '3XO & Transport'; updateSubcats('3XO & Transport'); subEl.value = '3XO Diesel'; noteEl.value = '3XO Fuel / Diesel';
+      } else if (lower.includes('hospital') || lower.includes('scan') || lower.includes('pharma') || lower.includes('apollo')) {
+        catEl.value = 'Hospital & Medical'; updateSubcats('Hospital & Medical'); subEl.value = 'Prenatal & Pregnancy'; noteEl.value = 'Hospital / Pharmacy';
+      } else if (lower.includes('swiggy') || lower.includes('zomato') || lower.includes('chicken') || lower.includes('party')) {
+        catEl.value = 'Food & Groceries'; updateSubcats('Food & Groceries'); subEl.value = 'Party'; noteEl.value = 'Party / Food Order';
+      }
+    };
+
+    window.updateSubcats = function(catName) {
+      const found = state.categoryTree.find(c => c.name === catName);
+      const subEl = document.getElementById('txSub');
+      if (found && subEl) {
+        subEl.innerHTML = found.subcategories.map(s => `<option value="${s}">${s}</option>`).join('');
+      }
+    };
+
+    window.addTx = function() {
+      const amt = Number(document.getElementById('txAmt').value);
+      if (!amt || amt <= 0) return;
+      const type = document.getElementById('txType').value;
+      const acc = document.getElementById('txAcc').value;
+      const cat = document.getElementById('txCat').value;
+      const sub = document.getElementById('txSub').value;
+      const note = document.getElementById('txNote').value.trim() || sub;
+      const date = document.getElementById('txDate').value || new Date().toISOString().slice(0,10);
+
+      state.transactions.unshift({
+        id: 'tx_' + Date.now(),
+        date, type, amount: amt, category: cat, subcategory: sub, merchant: note, account: acc
+      });
+
+      if (type === 'Expense') {
+        if (acc === 'Bank UPI' || acc === 'Bank Transfer') state.liveBankBalance = Math.max(0, state.liveBankBalance - amt);
+        else if (acc === 'RuPay CC') state.rupayCcBalance += amt;
+      } else {
+        state.liveBankBalance += amt;
+      }
+      save();
+    };
+
+    window.deleteTx = function(id) {
+      state.transactions = state.transactions.filter(t => t.id !== id);
+      save();
+    };
+
+    window.payRupay = function() {
+      if (state.rupayCcBalance <= 0) return;
+      const due = state.rupayCcBalance;
+      state.liveBankBalance = Math.max(0, state.liveBankBalance - due);
+      state.rupayCcBalance = 0;
+      state.transactions.unshift({
+        id: 'tx_' + Date.now(),
+        date: new Date().toISOString().slice(0,10),
+        type: 'Expense',
+        amount: due,
+        category: 'Debt, CC & Insurance',
+        subcategory: 'RuPay Credit Card Bill',
+        merchant: 'RuPay CC Bill Paid',
+        account: 'Bank Transfer'
+      });
+      save();
+    };
+
+    window.addLentEntry = function(personId) {
+      const amt = Number(document.getElementById('lentAmt_' + personId).value);
+      if (!amt || amt <= 0) return;
+      const type = document.getElementById('lentType_' + personId).value;
+      const note = document.getElementById('lentNote_' + personId).value.trim() || (type === 'lent' ? 'Lent More' : 'Returned');
+      const date = document.getElementById('lentDate_' + personId).value || new Date().toISOString().slice(0,10);
+
+      state.moneyLent = state.moneyLent.map(p => {
+        if (p.id !== personId) return p;
+        const nextH = [{ id: 'h_' + Date.now(), date, type, amount: amt, note }, ...(p.history || [])];
+        const nextTotal = nextH.reduce((s, h) => s + (h.type === 'returned' ? -Number(h.amount) : Number(h.amount)), 0);
+        return { ...p, history: nextH, amount: Math.max(0, nextTotal) };
+      });
+      save();
+    };
+
+    window.toggleRoadmap = function(id) {
+      state.roadmap = state.roadmap.map(r => r.id === id ? { ...r, done: !r.done } : r);
+      save();
+    };
+
+    window.addSubcat = function(catId) {
+      const inp = document.getElementById('subInp_' + catId);
+      if (!inp || !inp.value.trim()) return;
+      state.categoryTree = state.categoryTree.map(c => c.id === catId ? { ...c, subcategories: [...c.subcategories, inp.value.trim()] } : c);
+      save();
+    };
+
+    window.removeSubcat = function(catId, idx) {
+      state.categoryTree = state.categoryTree.map(c => c.id === catId ? { ...c, subcategories: c.subcategories.filter((_, i) => i !== idx) } : c);
+      save();
+    };
+
+    function render() {
+      const isDark = state.uiTheme === 'dark';
+      const body = document.getElementById('bodyRoot');
+      body.className = isDark
+        ? 'bg-[#090D16] text-slate-100 safe-bottom transition-colors duration-200'
+        : 'bg-[#F4F1EA] text-zinc-900 safe-bottom transition-colors duration-200';
+
+      const cardCls = isDark ? 'bg-[#111726] border-slate-800 text-slate-100' : 'bg-white border-[#E5E0D5] text-zinc-900 shadow-sm';
+      const subCardCls = isDark ? 'bg-[#0B0F19] border-slate-800' : 'bg-[#F7F5EF] border-[#E5E0D5]';
+      const mutedTxt = isDark ? 'text-slate-400' : 'text-zinc-500';
+      const accentTxt = isDark ? 'text-indigo-400' : 'text-indigo-800';
+
+      // Calculate dynamic totals for selected month in Time-Machine
+      const selTimeline = TIMELINE[selectedMonthIdx] || TIMELINE[0];
+      const mAhead = selTimeline.m;
+      let nps = 676120, pf = 625213, ppf = 118178;
+      for (let i = 0; i < mAhead; i++) {
+        nps = nps * (1 + 0.10/12) + 20497;
+        pf = pf * (1 + 0.0825/12) + 4720;
+        ppf = ppf * (1 + 0.071/12) + 1000;
+      }
+      const retireSum = Math.round(nps + pf + ppf);
+      const mfStSum = state.assetGroups.slice(1).reduce((s, g) => s + g.items.reduce((a, i) => a + Number(i.amount||0), 0), 0);
+      const lentSum = state.moneyLent.reduce((s, p) => s + Number(p.amount||0), 0);
+      const totalAssets = retireSum + mfStSum + lentSum + state.liveBankBalance;
+
+      const rRow = state.roadmap[Math.min(mAhead, state.roadmap.length - 1)] || state.roadmap[0];
+      let carBal = 1100000;
+      for (let i = 0; i < mAhead; i++) {
+        const intr = carBal * (0.09/12);
+        carBal = Math.max(0, carBal - (20800 - intr));
+      }
+      const totalDebt = mAhead === 0
+        ? (1800000 + 1425000 + 1100000 + state.rupayCcBalance)
+        : Math.round(rRow.bobBal + rRow.friendBal + carBal);
+      const netWorth = totalAssets - totalDebt;
+      const novSpends = state.transactions.filter(t => t.type === 'Expense').reduce((s, t) => s + Number(t.amount||0), 0);
+
+      let mainHtml = '';
+
+      if (activeTab === 'expenses') {
+        const defaultCat = state.categoryTree[0];
+        mainHtml = `
+          <div class="rounded-3xl p-4 border ${cardCls} space-y-3">
+            <div class="grid grid-cols-2 gap-1.5 p-1 rounded-2xl border ${subCardCls}">
+              <button onclick="entryMode='manual';render();" class="py-2 rounded-xl text-xs font-bold ${entryMode==='manual'?'btn-primary-uniform':'text-zinc-500'}">+ Manual Entry</button>
+              <button onclick="entryMode='sms';render();" class="py-2 rounded-xl text-xs font-bold ${entryMode==='sms'?'btn-primary-uniform':'text-zinc-500'}">✨ Auto SMS Reader</button>
+            </div>
+            ${entryMode === 'sms' ? `
+              <div class="p-3 rounded-2xl border ${subCardCls} space-y-2">
+                <p class="text-[11px] font-bold ${accentTxt}">Paste Bank / RuPay CC SMS (Auto-Fills Below)</p>
+                <textarea id="smsBox" rows="2" oninput="parseSmsText(this.value)" placeholder="Paste Axis Bank, RuPay CC, or UPI SMS here..." class="w-full rounded-xl p-2 text-xs border ${cardCls}"></textarea>
+              </div>
+            ` : ''}
+            <div class="grid grid-cols-3 gap-2">
+              <select id="txType" class="rounded-xl px-2 py-2 text-xs font-bold border ${subCardCls}">
+                <option value="Expense">Expense (-)</option>
+                <option value="Income">Income (+)</option>
+              </select>
+              <input id="txAmt" type="number" placeholder="₹ Amount" class="rounded-xl px-3 py-2 text-xs font-bold border ${subCardCls}" />
+              <select id="txAcc" class="rounded-xl px-2 py-2 text-xs font-medium border ${subCardCls}">
+                <option value="Bank UPI">Bank UPI</option>
+                <option value="RuPay CC">RuPay CC</option>
+                <option value="Sodexo">Sodexo</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <select id="txCat" onchange="updateSubcats(this.value)" class="rounded-xl px-2.5 py-2 text-xs border ${subCardCls}">
+                ${state.categoryTree.map(c => `<option value="${c.name}">${c.emoji} ${c.name}</option>`).join('')}
+              </select>
+              <select id="txSub" class="rounded-xl px-2.5 py-2 text-xs font-bold ${accentTxt} border ${subCardCls}">
+                ${defaultCat.subcategories.map(s => `<option value="${s}">${s}</option>`).join('')}
+              </select>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <input id="txNote" type="text" placeholder="Note / Item (e.g. Party, Diesel)" class="col-span-2 rounded-xl px-3 py-2 text-xs border ${subCardCls}" />
+              <input id="txDate" type="date" value="${new Date().toISOString().slice(0,10)}" class="rounded-xl px-2 py-2 text-xs border ${subCardCls}" />
+            </div>
+            <button onclick="addTx()" class="w-full py-2.5 rounded-xl font-bold text-xs btn-primary-uniform">+ Save Expense to Daily Ledger</button>
+          </div>
+
+          <div class="rounded-3xl p-4 border ${cardCls} space-y-2.5">
+            <div class="flex justify-between items-center">
+              <h3 class="text-xs font-bold">Daily Expense Ledger (${state.transactions.length})</h3>
+              <span class="text-xs font-bold text-rose-600">Total: ${formatINR(novSpends)}</span>
+            </div>
+            <div class="divide-y divide-stone-200/40 space-y-1">
+              ${state.transactions.map(t => `
+                <div class="pt-2 flex items-center justify-between text-xs">
+                  <div>
+                    <p class="font-bold">${t.merchant}</p>
+                    <p class="text-[10px] ${mutedTxt}">${t.date} • <span class="${accentTxt} font-semibold">${t.subcategory}</span> • ${t.account}</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-extrabold ${t.type==='Expense'?'text-rose-600':accentTxt}">${t.type==='Expense'?'-':'+'}${formatINR(t.amount)}</span>
+                    <button onclick="deleteTx('${t.id}')" class="text-zinc-400 hover:text-rose-500 text-xs px-1">✕</button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (activeTab === 'categories') {
+        mainHtml = `
+          <div class="space-y-3">
+            ${state.categoryTree.map(cat => `
+              <div class="rounded-3xl p-4 border ${cardCls} space-y-2.5">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-extrabold">${cat.emoji} ${cat.name}</span>
+                  <span class="text-[10px] ${mutedTxt}">Budget: ${formatINR(cat.monthlyBudget)}</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                  ${cat.subcategories.map((s, idx) => `
+                    <span class="px-2.5 py-1 rounded-xl text-xs border ${subCardCls} flex items-center gap-1.5">
+                      <span>${s}</span>
+                      <button onclick="removeSubcat('${cat.id}', ${idx})" class="text-zinc-400 hover:text-rose-500">✕</button>
+                    </span>
+                  `).join('')}
+                </div>
+                <div class="flex gap-2 pt-1">
+                  <input id="subInp_${cat.id}" type="text" placeholder="+ Add subcategory..." class="flex-1 rounded-xl px-3 py-1.5 text-xs border ${subCardCls}" />
+                  <button onclick="addSubcat('${cat.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold btn-primary-uniform">+ Add</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (activeTab === 'balancesheet') {
+        mainHtml = `
+          <div class="rounded-3xl p-3.5 border ${cardCls} space-y-2.5">
+            <p class="text-xs font-bold">Balance Sheet Time-Machine (2026 → 2028)</p>
+            <div class="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+              ${TIMELINE.map((t, idx) => `
+                <button onclick="selectedMonthIdx=${idx};render();" class="shrink-0 px-3 py-1.5 rounded-xl text-[11px] font-bold ${selectedMonthIdx===idx?'btn-primary-uniform':subCardCls}">${t.label}</button>
+              `).join('')}
+            </div>
+            <p class="text-[11px] ${accentTxt} font-bold">${selTimeline.desc}</p>
+          </div>
+
+          <div class="rounded-3xl p-4 border ${cardCls} space-y-3">
+            <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-indigo-500/10 ${accentTxt}">Net Worth • ${selTimeline.label}</span>
+            <h2 class="text-2xl font-black">${formatINR(netWorth)}</h2>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="p-3 rounded-2xl border ${subCardCls}">
+                <p class="text-[10px] ${mutedTxt}">Retirement (NPS+PF+PPF)</p>
+                <p class="font-extrabold ${accentTxt} mt-0.5">${formatINR(retireSum)}</p>
+              </div>
+              <div class="p-3 rounded-2xl border ${subCardCls}">
+                <p class="text-[10px] ${mutedTxt}">MF + Shares</p>
+                <p class="font-extrabold ${accentTxt} mt-0.5">${formatINR(mfStSum)}</p>
+              </div>
+              <div class="p-3 rounded-2xl border ${subCardCls}">
+                <p class="text-[10px] ${mutedTxt}">Money Lent (${state.moneyLent.length})</p>
+                <p class="font-extrabold ${accentTxt} mt-0.5">${formatINR(lentSum)}</p>
+              </div>
+              <div class="p-3 rounded-2xl border ${subCardCls}">
+                <p class="text-[10px] ${mutedTxt}">Remaining Debt</p>
+                <p class="font-extrabold text-rose-600 mt-0.5">${formatINR(totalDebt)}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-3xl p-4 border ${cardCls} space-y-2.5">
+            <h3 class="text-xs font-extrabold">Money Lent Dated Ledger (${formatINR(lentSum)})</h3>
+            <div class="space-y-2">
+              ${state.moneyLent.map(p => `
+                <div class="rounded-2xl border ${subCardCls} overflow-hidden">
+                  <button onclick="expandedLentId = (expandedLentId==='${p.id}'?null:'${p.id}');render();" class="w-full p-3 flex justify-between items-center text-left">
+                    <div>
+                      <p class="text-xs font-bold">${p.name}</p>
+                      <p class="text-[10px] ${mutedTxt}">${p.note}</p>
+                    </div>
+                    <span class="text-xs font-extrabold ${accentTxt}">${formatINR(p.amount)} ▾</span>
+                  </button>
+                  ${expandedLentId === p.id ? `
+                    <div class="p-3 border-t border-stone-200/40 space-y-2">
+                      <div class="grid grid-cols-3 gap-1.5">
+                        <select id="lentType_${p.id}" class="rounded-xl px-2 py-1 text-[11px] font-bold border ${cardCls}">
+                          <option value="lent">+ Lent</option>
+                          <option value="returned">- Return</option>
+                        </select>
+                        <input id="lentAmt_${p.id}" type="number" placeholder="₹ Amount" class="rounded-xl px-2 py-1 text-[11px] font-bold border ${cardCls}" />
+                        <input id="lentDate_${p.id}" type="date" value="${new Date().toISOString().slice(0,10)}" class="rounded-xl px-1.5 py-1 text-[10px] border ${cardCls}" />
+                      </div>
+                      <div class="flex gap-1.5">
+                        <input id="lentNote_${p.id}" type="text" placeholder="Note" class="flex-1 rounded-xl px-2.5 py-1 text-[11px] border ${cardCls}" />
+                        <button onclick="addLentEntry('${p.id}')" class="px-3 py-1 rounded-xl text-[11px] font-bold btn-primary-uniform">Save</button>
+                      </div>
+                      <div class="divide-y divide-stone-200/30 text-[11px]">
+                        ${(p.history||[]).map(h => `
+                          <div class="py-1 flex justify-between">
+                            <span>${h.note} (${h.date})</span>
+                            <span class="font-bold ${h.type==='returned'?'text-rose-600':accentTxt}">${h.type==='returned'?'-':'+'}${formatINR(h.amount)}</span>
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>
+                  ` : ''}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (activeTab === 'roadmap') {
+        mainHtml = `
+          <div class="space-y-2">
+            ${state.roadmap.map(r => `
+              <div onclick="toggleRoadmap('${r.id}')" class="rounded-2xl p-3.5 border ${cardCls} cursor-pointer">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-extrabold">${r.done ? '✅ ' : '⬜ '}${r.month}</span>
+                  <span class="text-[10px] font-bold ${accentTxt}">Friend: ${formatINR(r.friendPay)} | BoB: ${formatINR(r.bobPay)}</span>
+                </div>
+                <p class="text-[11px] ${mutedTxt} mt-1">${r.note}</p>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (activeTab === 'sync') {
+        mainHtml = `
+          <div class="rounded-3xl p-4 border ${cardCls} space-y-3">
+            <h3 class="text-xs font-extrabold">Cloud Backup &amp; Google Sheet Sync</h3>
+            <p class="text-[11px] ${mutedTxt}">Your data is saved automatically on your iPhone in offline storage. You can also paste your Google Apps Script Web App URL below for 2-way Google Sheet backup:</p>
+            <input type="text" value="${syncWebhookUrl}" onchange="localStorage.setItem('sachin_gsheet_webhook', this.value); syncWebhookUrl=this.value;" placeholder="https://script.google.com/macros/s/.../exec" class="w-full rounded-xl px-3 py-2 text-xs border ${subCardCls}" />
+          </div>
+        `;
+      }
+
+      document.getElementById('app').innerHTML = `
+        <header class="sticky top-0 z-30 backdrop-blur-xl ${isDark?'bg-[#090D16]/95 border-slate-800':'bg-[#FBF9F5]/95 border-[#E2DDD2]'} border-b px-4 py-3">
+          <div class="max-w-lg mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-2xl btn-primary-uniform flex items-center justify-center font-black text-base">₹</div>
+              <div>
+                <h1 class="text-sm font-extrabold">Sachin's Wealth Studio</h1>
+                <p class="text-[10px] ${mutedTxt}">iPhone Full-Screen PWA • Nov 2026</p>
+              </div>
+            </div>
+            <button onclick="state.uiTheme = (state.uiTheme==='light'?'dark':'light'); save();" class="px-3 py-1.5 rounded-xl text-xs font-bold btn-primary-uniform">
+              ${isDark ? '☀️ Light' : '🌙 Dark'}
+            </button>
+          </div>
+        </header>
+
+        <main class="max-w-lg mx-auto px-4 pt-3 space-y-4">
+          <div class="rounded-3xl p-3 border ${cardCls}">
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="text-[11px] font-bold">Live Bank &amp; RuPay CC (Nov 2026)</span>
+              ${state.rupayCcBalance > 0 ? `<button onclick="payRupay()" class="px-2 py-0.5 rounded-lg text-[10px] font-bold btn-primary-uniform">Pay CC (${formatINR(state.rupayCcBalance)})</button>` : ''}
+            </div>
+            <div class="grid grid-cols-3 text-center divide-x divide-stone-300/40 p-2 rounded-2xl border ${subCardCls}">
+              <div><p class="text-[10px] ${mutedTxt}">Bank Now</p><p class="text-xs font-extrabold ${accentTxt}">${formatINR(state.liveBankBalance)}</p></div>
+              <div><p class="text-[10px] ${mutedTxt}">RuPay CC</p><p class="text-xs font-extrabold text-rose-600">${formatINR(state.rupayCcBalance)}</p></div>
+              <div><p class="text-[10px] ${mutedTxt}">Net Cash</p><p class="text-xs font-extrabold">${formatINR(state.liveBankBalance - state.rupayCcBalance)}</p></div>
+            </div>
+          </div>
+          ${mainHtml}
+        </main>
+
+        <nav class="fixed bottom-0 left-0 right-0 z-40 backdrop-blur-xl ${isDark?'bg-[#090D16]/95 border-slate-800':'bg-[#FBF9F5]/95 border-[#E2DDD2]'} border-t px-2 py-1.5">
+          <div class="max-w-lg mx-auto grid grid-cols-5 gap-1 text-center">
+            <button onclick="activeTab='expenses';render();" class="py-1.5 rounded-2xl text-[10px] font-bold ${activeTab==='expenses'?'bg-indigo-100 text-indigo-900':mutedTxt}">💬<br/>Spends</button>
+            <button onclick="activeTab='categories';render();" class="py-1.5 rounded-2xl text-[10px] font-bold ${activeTab==='categories'?'bg-indigo-100 text-indigo-900':mutedTxt}">🗂️<br/>Categories</button>
+            <button onclick="activeTab='balancesheet';render();" class="py-1.5 rounded-2xl text-[10px] font-bold ${activeTab==='balancesheet'?'bg-indigo-100 text-indigo-900':mutedTxt}">🏛️<br/>Sheet</button>
+            <button onclick="activeTab='roadmap';render();" class="py-1.5 rounded-2xl text-[10px] font-bold ${activeTab==='roadmap'?'bg-indigo-100 text-indigo-900':mutedTxt}">📅<br/>Debt Plan</button>
+            <button onclick="activeTab='sync';render();" class="py-1.5 rounded-2xl text-[10px] font-bold ${activeTab==='sync'?'bg-indigo-100 text-indigo-900':mutedTxt}">☁️<br/>Sync</button>
+          </div>
+        </nav>
+      `;
+    }
+    render();
+  </script>
+</body>
+</html>
